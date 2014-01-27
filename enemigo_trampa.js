@@ -21,7 +21,10 @@ function cargarEnemigoTrampa(Q) {
     meMataron: function(player) {
       // Matar a un enemigo trampa da más puntaje
       Q.sumarPuntaje(20);
-      player.p.vy = -300;
+      Q("Enemy").destroy();
+      Q("DashEnemy").destroy();
+      Q("JumpyEnemy").destroy();
+      Q("CrazyEnemy").destroy();
     }
   });
 }

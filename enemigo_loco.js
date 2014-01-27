@@ -34,7 +34,6 @@ function cargarEnemigoLoco(Q) {
     meMataron: function(player) {
       // Matar a un saltarín da más puntaje
       Q.sumarPuntaje(20);
-      player.p.vy = -300;
     }
   });
 }

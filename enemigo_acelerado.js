@@ -24,7 +24,6 @@ function cargarEnemigoAcelerado(Q) {
     meMataron: function(player) {
       // Matar a un acelerado da más puntaje
       Q.sumarPuntaje(20);
-      player.p.vy = -300;
     }
   });
 }
