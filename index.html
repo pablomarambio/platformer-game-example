@@ -14,7 +14,7 @@
       // Now set up your game (most games will load a separate .js file)
       var Q = Quintus()                          // Create a new engine instance
               .include("Sprites, Scenes, Input, 2D, Touch, UI") // Load any needed modules
-              .setup()                           // Add a canvas element onto the page
+              .setup({width: 600})                           // Add a canvas element onto the page
               .controls()                        // Add in default controls (keyboard, buttons)
               .touch();                          // Add in touch support (for the UI)
               
@@ -68,10 +68,15 @@ Q.restarVidas = function() {
   }
 }
 
+Q.sumarPuntaje = function(cuanto) {
+  Q.state.inc("puntaje", cuanto);
+}
+
 // Create a new scene called level 1
 Q.scene("level1",function(stage) {
 
-  Q.state.set("vidas", 3)
+  Q.state.set("vidas", 3);
+  Q.state.set("puntaje", 0);
   // Add in a tile layer, and make it the collision layer
   stage.collisionLayer(new Q.TileLayer({
                              dataAsset: 'level1.json',
@@ -142,23 +147,36 @@ Q.scene('endGame',function(stage) {
 
 Q.scene('marcador',function(stage) {
   var container = stage.insert(new Q.UI.Container({
-    x: Q.width/2, y: 50, fill: "rgba(0,0,0,0.5)"
+    x: Q.width/2, y: 50, w: 600, fill: "rgba(0,0,0,0.5)"
   }));
   
-  var label1 = container.insert(new Q.UI.Text({x:0, y: -10, label: "Etapa: " + Q.state.get("level") }));
+  var labelEtapa = container.insert(new Q.UI.Text({x:0, y: -10, label: "Etapa: " + Q.state.get("level") }));
 
-  var label2 = container.insert(new Q.UI.Text({x:10 + label1.p.w, y: -10, label: "Vidas: " + Q.state.get("vidas") }));
-  label2.p.color = "#00FF00"; //verde
+  var labelVidas = container.insert(new Q.UI.Text({x:10 + labelEtapa.p.w, y: -10, label: "Vidas: " + Q.state.get("vidas") }));
+  labelVidas.p.color = "#00FF00"; //verde
+
+  var labelPuntaje = container.insert(new Q.UI.Text({x:10 + labelVidas.p.x + labelVidas.p.w, y: -10, label: "Punt: " + Q.state.get("puntaje") }));
 
   // El mensaje de las vidas restantes cambiará cada vez que cambie el estado de la variable "vidas"
   Q.state.on("change.vidas", function() {
     var vidasRestantes = Q.state.get("vidas");
     if(vidasRestantes == 2) {
-      label2.p.color = "#FFFF00"; // amarillo
+      labelVidas.p.color = "#FFFF00"; // amarillo
     } else if (vidasRestantes == 1) {
-      label2.p.color = "#FF0000"; // rojo
+      labelVidas.p.color = "#FF0000"; // rojo
     }
-    label2.p.label = "Vidas: " + Q.state.get("vidas");
+    labelVidas.p.label = "Vidas: " + vidasRestantes;
+  });
+
+  // El mensaje del puntaje cambiará cada vez que cambie el estado de la variable "putaje"
+  Q.state.on("change.puntaje", function() {
+    var puntaje = Q.state.get("puntaje");
+    labelPuntaje.p.label = "Punt: " + puntaje;
+    if(puntaje < 0) {
+      labelPuntaje.p.color = "#FF0000"; // rojo
+    } else {
+      labelVidas.p.color = "#000000"; // negro
+    }
   });
   // Expand the container to visibily fit it's contents
   container.fit(10);

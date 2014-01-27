@@ -13,6 +13,8 @@ function cargarEnemigo(Q) {
       this.on("bump.left,bump.right,bump.bottom",function(collision) {
         if(collision.obj.isA("Player")) {
           this.destroy();
+          // Menos 10 puntos por cada vida perdida
+          Q.sumarPuntaje(-10);
           Q.restarVidas();
         }
       });
@@ -22,6 +24,8 @@ function cargarEnemigo(Q) {
       this.on("bump.top",function(collision) {
         if(collision.obj.isA("Player")) { 
           this.destroy();
+          // 5 puntos por cada enemigo destruido
+          Q.sumarPuntaje(5);
           collision.obj.p.vy = -300;
         }
       });

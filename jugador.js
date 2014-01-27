@@ -20,6 +20,8 @@ function cargarJugador(Q) {
       this.on("hit.sprite",function(collision) {
         // Check the collision, if it's the Tower, you win!
         if(collision.obj.isA("Tower")) {
+          // Llegar a la torre: 50 puntos
+          Q.sumarPuntaje(50);
           // Stage the endGame scene above the current stage
           Q.siguienteEtapa();
           // Remove the player to prevent them from moving
