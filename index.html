@@ -25,16 +25,61 @@ cargarTorre(Q);
 
 cargarEnemigo(Q);
 
+// Cambia a la siguiente etapa, o a la que se indique como 
+// argumento. La etapa 3 corresponde al final del juego
+Q.siguienteEtapa = function(siguiente) {
+  // Si no se indica una etapa, calcular la siguiente en 
+  // función de la actual
+  if(typeof(siguiente)==='undefined') {
+    var actual = Q.state.get("level");
+    if(typeof(actual)==='undefined') {
+      siguiente = 1;
+    } else {
+      siguiente = (actual + 1)%4;
+    }
+  }
+  // Borrar la etapa actual
+  Q.clearStages();
+  // Ir a la siguiente
+  Q.state.set("level", siguiente);
+  if (siguiente == 1) {
+    Q.stageScene('level1');
+    Q.stageScene('marcador', 2);
+  } else if(siguiente == 2) {
+    Q.stageScene('level2');
+    Q.stageScene('marcador', 2);
+  } else if (siguiente == 3) {
+    var vidasRestantes = Q.state.get("vidas");
+    if(vidasRestantes == 0) {
+      Q.stageScene("endGame",1, { label: "Perdiste!" });
+    } else {
+      Q.stageScene("endGame",1, { label: "Ganaste!" });
+    }
+  }
+}
+
+Q.restarVidas = function() {
+  // Disminuimos las vidas en 1
+  Q.state.dec("vidas", 1);
+  // Si no quedan vidas, terminamos el juego
+  var vidasRestantes = Q.state.get("vidas");
+  if(vidasRestantes == 0) {
+    Q.siguienteEtapa(3); // mostrar mensaje final ("Perdiste!")
+  }
+}
+
 // Create a new scene called level 1
 Q.scene("level1",function(stage) {
 
+  Q.state.set("vidas", 3)
   // Add in a tile layer, and make it the collision layer
   stage.collisionLayer(new Q.TileLayer({
-                             dataAsset: 'level.json',
+                             dataAsset: 'level1.json',
                              sheet:     'tiles' }));
                              
   // Create the player and add him to the stage
   var player = stage.insert(new Q.Player());
+  console.log(player.sheet());
   
   // Give the stage a moveable viewport and tell it
   // to follow the player.
@@ -45,7 +90,32 @@ Q.scene("level1",function(stage) {
   stage.insert(new Q.Enemy({ x: 800, y: 0 }));
   
   // Finally add in the tower goal
-  stage.insert(new Q.Tower({ x: 180, y: 50 }));
+  stage.insert(new Q.Tower({ x: 310, y: 20 }));
+});
+
+// Create a new scene called level 1
+Q.scene("level2",function(stage) {
+
+  // Add in a tile layer, and make it the collision layer
+  stage.collisionLayer(new Q.TileLayer({
+                             dataAsset: 'level2.json',
+                             sheet:     'tiles' }));
+                             
+  // Create the player and add him to the stage
+  var player = stage.insert(new Q.Player());
+  console.log(player.sheet());
+  
+  // Give the stage a moveable viewport and tell it
+  // to follow the player.
+  stage.add("viewport").follow(player);
+  
+  // Add in a couple of enemies
+  for(var i = 0; i < 10; i++) {
+    stage.insert(new Q.Enemy({ x: 300 + i*100, y: 0 }));
+  }
+  
+  // Finally add in the tower goal
+  stage.insert(new Q.Tower({ x: 310, y: 20 }));
 });
 
 // To display a game over / game won popup box, 
@@ -63,18 +133,41 @@ Q.scene('endGame',function(stage) {
   // When the button is clicked, clear all the stages
   // and restart the game.
   button.on("click",function() {
-    Q.clearStages();
-    Q.stageScene('level1');
+    Q.siguienteEtapa(1);
   });
   
   // Expand the container to visibily fit it's contents
   container.fit(20);
 });
 
+Q.scene('marcador',function(stage) {
+  var container = stage.insert(new Q.UI.Container({
+    x: Q.width/2, y: 50, fill: "rgba(0,0,0,0.5)"
+  }));
+  
+  var label1 = container.insert(new Q.UI.Text({x:0, y: -10, label: "Etapa: " + Q.state.get("level") }));
+
+  var label2 = container.insert(new Q.UI.Text({x:10 + label1.p.w, y: -10, label: "Vidas: " + Q.state.get("vidas") }));
+  label2.p.color = "#00FF00"; //verde
+
+  // El mensaje de las vidas restantes cambiará cada vez que cambie el estado de la variable "vidas"
+  Q.state.on("change.vidas", function() {
+    var vidasRestantes = Q.state.get("vidas");
+    if(vidasRestantes == 2) {
+      label2.p.color = "#FFFF00"; // amarillo
+    } else if (vidasRestantes == 1) {
+      label2.p.color = "#FF0000"; // rojo
+    }
+    label2.p.label = "Vidas: " + Q.state.get("vidas");
+  });
+  // Expand the container to visibily fit it's contents
+  container.fit(10);
+});
+
 loadData(Q);
 // Q.load can be called at any time to load additional assets
 // assets that are already loaded will be skipped
-Q.load("sprites.png, sprites.json, level.json, tiles.png",
+Q.load("sprites.png, sprites.json, tiles.png",
   // The callback will be triggered when everything is loaded
   function() {
     // Sprites sheets can be created manually
@@ -84,7 +177,7 @@ Q.load("sprites.png, sprites.json, level.json, tiles.png",
     Q.compileSheets("sprites.png","sprites.json");
     
     // Finally, call stageScene to run the game
-    Q.stageScene("level1");
+    Q.siguienteEtapa(1);
   });
    </script>
    </body>
