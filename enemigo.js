@@ -11,9 +11,9 @@ function cargarEnemigo(Q) {
       // Listen for a sprite collision, if it's the player,
       // end the game unless the enemy is hit on top
       this.on("bump.left,bump.right,bump.bottom",function(collision) {
-        if(collision.obj.isA("Player")) { 
-          Q.stageScene("endGame",1, { label: "You Died" }); 
-          collision.obj.destroy();
+        if(collision.obj.isA("Player")) {
+          this.destroy();
+          Q.restarVidas();
         }
       });
       

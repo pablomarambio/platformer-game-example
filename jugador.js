@@ -7,7 +7,9 @@ function cargarJugador(Q) {
     
       // You can call the parent's constructor with this._super(..)
       this._super(p, {
-        sheet: "player"  // Setting a sprite sheet sets sprite width and height
+        sheet: "player",
+        x: 410,
+        y: 90
       });
       
       // Add in pre-made components to get up and running quickly
@@ -19,7 +21,7 @@ function cargarJugador(Q) {
         // Check the collision, if it's the Tower, you win!
         if(collision.obj.isA("Tower")) {
           // Stage the endGame scene above the current stage
-          Q.stageScene("endGame",1, { label: "You Won!" }); 
+          Q.siguienteEtapa();
           // Remove the player to prevent them from moving
           this.destroy();
         }
