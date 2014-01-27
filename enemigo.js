@@ -23,12 +23,15 @@ function cargarEnemigo(Q) {
       // and give the user a "hop"
       this.on("bump.top",function(collision) {
         if(collision.obj.isA("Player")) { 
+          this.meMataron(collision.obj);
           this.destroy();
           // 5 puntos por cada enemigo destruido
-          Q.sumarPuntaje(5);
-          collision.obj.p.vy = -300;
         }
       });
+    },
+    meMataron: function(player) {
+      Q.sumarPuntaje(5);
+      player.p.vy = -300;
     }
   });
 }

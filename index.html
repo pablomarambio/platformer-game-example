@@ -7,6 +7,7 @@
     <script src='jugador.js'></script>
     <script src='torre.js'></script>
     <script src='enemigo.js'></script>
+    <script src='enemigo_saltarin.js'></script>
   </head>
    <body>
      <script>
@@ -24,6 +25,8 @@ cargarJugador(Q);
 cargarTorre(Q);
 
 cargarEnemigo(Q);
+
+cargarEnemigoSaltarin(Q);
 
 // Cambia a la siguiente etapa, o a la que se indique como 
 // argumento. La etapa 3 corresponde al final del juego
@@ -91,7 +94,7 @@ Q.scene("level1",function(stage) {
   stage.add("viewport").follow(player);
   
   // Add in a couple of enemies
-  stage.insert(new Q.Enemy({ x: 700, y: 0 }));
+  stage.insert(new Q.JumpyEnemy({ x: 700, y: 0 }));
   stage.insert(new Q.Enemy({ x: 800, y: 0 }));
   
   // Finally add in the tower goal
@@ -175,7 +178,7 @@ Q.scene('marcador',function(stage) {
     if(puntaje < 0) {
       labelPuntaje.p.color = "#FF0000"; // rojo
     } else {
-      labelVidas.p.color = "#000000"; // negro
+      labelPuntaje.p.color = "#000000"; // negro
     }
   });
   // Expand the container to visibily fit it's contents
