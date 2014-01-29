@@ -28,6 +28,15 @@ function cargarJugador(Q) {
           this.destroy();
         }
       });
+    }, step: function(dt) {
+      var threshold = 32*2;
+      if(this.p.x > Q.stage()._collisionLayers[0].c.w + threshold ||
+        this.p.x < -1*threshold ||
+        this.p.y > Q.stage()._collisionLayers[0].c.h + threshold ||
+        this.p.y < -1*threshold) {
+        Q.state.set("vidas", 1);
+        Q.restarVidas();
+      }
     }
   });
 }

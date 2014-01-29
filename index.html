@@ -89,7 +89,6 @@ Q.sumarPuntaje = function(cuanto) {
 
 // Create a new scene called level 1
 Q.scene("level1",function(stage) {
-
   Q.state.set("vidas", 3);
   Q.state.set("puntaje", 0);
   // Add in a tile layer, and make it the collision layer
@@ -113,7 +112,7 @@ Q.scene("level1",function(stage) {
   stage.insert(new Q.CrazyEnemy({ x: 650, y: 100, sheet: "enemy4" }));
   stage.insert(new Q.TrapEnemy({ x: 650, y: 100, sheet: "enemy5" }));
   // Teleporter
-  stage.insert(new Q.Teleporter({ x: 450, y: 32*5 }, {player_x: 5*32, player_y: 0}));
+  stage.insert(new Q.Teleporter({ x: 450, y: 32*5 }, {player_x: 4*32, player_y: -32}));
 
   
   // Finally add in the tower goal
@@ -218,6 +217,9 @@ Q.load("sprites_zombies.png, sprites.json, tiles_uno.png",
     
     // Finally, call stageScene to run the game
     Q.siguienteEtapa(1);
+
+      console.log(Q.stage());
+
   });
    </script>
    </body>
