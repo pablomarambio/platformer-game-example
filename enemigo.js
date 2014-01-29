@@ -26,11 +26,11 @@ function cargarEnemigo(Q) {
           collision.obj.p.vy = -300;
           this.meMataron();
           this.destroy();
-          // 5 puntos por cada enemigo destruido
         }
       });
     },
     meMataron: function(player) {
+      // 5 puntos por cada enemigo destruido
       Q.sumarPuntaje(5);
     }
   });
