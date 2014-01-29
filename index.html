@@ -102,12 +102,14 @@ Q.scene("level1",function(stage) {
   // to follow the player.
   stage.add("viewport").follow(player);
   
-  // Add in a couple of enemies
-  stage.insert(new Q.DashEnemy({ x: 600, y: 0 }));
-  stage.insert(new Q.JumpyEnemy({ x: 600, y: 0 }));
-  stage.insert(new Q.CrazyEnemy({ x: 700, y: 0 }));
-  stage.insert(new Q.TrapEnemy({ x: 800, y: 0 }));
-  stage.insert(new Q.Enemy({ x: 800, y: 0 }));
+  // Agregar un enemigo
+  stage.insert(new Q.Enemy({ x: 600, y: 100 }));
+  // Agregar otros tipos den enemigos
+  stage.insert(new Q.JumpyEnemy({ x: 600, y: 100, sheet: "enemy2" }));
+  stage.insert(new Q.DashEnemy({ x: 650, y: 100, sheet: "enemy3"}));
+  stage.insert(new Q.CrazyEnemy({ x: 650, y: 100, sheet: "enemy4" }));
+  stage.insert(new Q.TrapEnemy({ x: 650, y: 100, sheet: "enemy5" }));
+
   
   // Finally add in the tower goal
   stage.insert(new Q.Tower({ x: 310, y: 20 }));
@@ -200,14 +202,14 @@ Q.scene('marcador',function(stage) {
 loadData(Q);
 // Q.load can be called at any time to load additional assets
 // assets that are already loaded will be skipped
-Q.load("sprites.png, sprites.json, tiles.png",
+Q.load("sprites_zombies.png, sprites.json, tiles_uno.png",
   // The callback will be triggered when everything is loaded
   function() {
     // Sprites sheets can be created manually
-    Q.sheet("tiles","tiles.png", { tilew: 32, tileh: 32 });
+    Q.sheet("tiles","tiles_uno.png", { tilew: 32, tileh: 32 });
     
     // Or from a .json asset that defines sprite locations
-    Q.compileSheets("sprites.png","sprites.json");
+    Q.compileSheets("sprites_zombies.png","sprites.json");
     
     // Finally, call stageScene to run the game
     Q.siguienteEtapa(1);
